@@ -67,6 +67,35 @@ DocumentType = Dict[
 ]
 
 
+def transform_data(
+    data: Union[Dict[str, Any], List[Any]]
+) -> Union[Dict[str, Any], List[Any]]:
+    """
+    Helper function that recursively enters an unknown-amount nested dictionary or list and applies transformations to all string elements.
+    This function can be flexibly edited to apply other transformations to the data structure as needed.
+    In this example, we remove trailing newline characters from all string elements.
+    Usage: transform_data(data)
+
+    Args:
+        data (dict, list, str): The input data structure which can be a dictionary, list, string, or any other type.
+
+    Returns:
+        data (same as input): The transformed data structure with modifications applied to all string elements.
+    """
+    if isinstance(data, dict):
+        return {
+            transform_data(key): transform_data(value) for key, value in data.items()
+        }
+    elif isinstance(data, list):
+        return [transform_data(element) for element in data]
+    elif isinstance(data, str):
+        # Edit the transformation here as needed
+        return data.rstrip("\n")
+    else:
+        print("There are no string elements in the data structure to transform.")
+        return data
+
+
 def read_yaml_file(input_file: str) -> DocumentType:
     """
     Used to read a YAML file and return the content as a dictionary
@@ -80,6 +109,9 @@ def read_yaml_file(input_file: str) -> DocumentType:
     """
     with open(input_file, "r", encoding="utf-8") as file:
         yaml_content = yaml.safe_load(file)
+
+    # Transform the data structure to remove trailing newline characters from all string elements
+    yaml_content = transform_data(yaml_content)
     return yaml_content
 
 
@@ -168,7 +200,7 @@ def get_mixed_types_str_keys(
         # Else if the item is a dictionary, add the key to the list
         elif isinstance(item, dict):
             mixed_str_key_list.append(list(item.keys())[0])
-        # Default case handling
+        # Else if the item is neither a string nor a dictionary, add an error message to the list
         else:
             mixed_str_key_list.append("error here")
 
@@ -215,7 +247,6 @@ def get_mixed_types_dict_values(content: List[Any]) -> List[str]:
     return dict_values
 
 
-
 def example_document_generation(
     yaml_content: DocumentType,
     input_file: str = os.path.join("example", "template_example.docx"),
@@ -235,38 +266,38 @@ def example_document_generation(
     None
 
     For the example document, the data structure is as follows:
-    {'type': 'EXAMPLE DOCUMENT', 
-    'document_no': 'EX01-100', 
-    'document_code': 'EX01-100-01', 
-    'effective_date': '06-JUN-2024', 
-    'document_rev': '00', 
-    'title': 'Example Document', 
-    'revision_history': [{'revision_no': '00', 'description_of_changes': 'Initial release', 'effective_date': '06-JUN-2024'}], 
-    'prepared_by': [{'name': 'Nicholas Chua', 'title': 'Preparer'}], 
-    'reviewed_approved_by': [{'name': 'Not Nicholas Chua', 'title': 'Approver'}], 
-    'purpose': ['Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'], 
-    'scope': ['Lorem ipsum dolor sit.'], 
-    'responsibility': ['Lorem ipsum,', 'dolor sit amet.'], 
-    'definition': ['Lorem: ipsum,', 'Dolor: sit amet.'], 
+    {'type': 'EXAMPLE DOCUMENT',
+    'document_no': 'EX01-100',
+    'document_code': 'EX01-100-01',
+    'effective_date': '06-JUN-2024',
+    'document_rev': '00',
+    'title': 'Example Document',
+    'revision_history': [{'revision_no': '00', 'description_of_changes': 'Initial release', 'effective_date': '06-JUN-2024'}],
+    'prepared_by': [{'name': 'Nicholas Chua', 'title': 'Preparer'}],
+    'reviewed_approved_by': [{'name': 'Not Nicholas Chua', 'title': 'Approver'}],
+    'purpose': ['Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+    'scope': ['Lorem ipsum dolor sit.'],
+    'responsibility': ['Lorem ipsum,', 'dolor sit amet.'],
+    'definition': ['Lorem: ipsum,', 'Dolor: sit amet.'],
     'procedure': {
-    'example_policy': 
+    'example_policy':
     [
         {
         'Lorem ipsum dolor sit amet:': ['consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.']
-        }, 
+        },
         {
-        '"This is a very very very very long multi-line comment line 1.\nThis is a very very very very long multi-line comment line 2:"\n': ['This is a sub-item of the multi-line comment.']
-        }, 
+        'This is a very very very very long multi-line comment line 1.\nThis is a very very very very long multi-line comment line 2:': ['This is a sub-item of the multi-line comment.']
+        },
         'Lorem ipsum dolor sit amet.'
-    ], 
-    'another_policy': 
+    ],
+    'another_policy':
     [
         {
         'I have 9 sub items:': ['Item 1.', 'Item 2.', 'Item 3.', 'Item 4.', 'Item 5.', 'Item 6.', 'Item 7.', 'Item 8.', 'Item 9.']
         }
     ]
-    }, 
-    'reference': ['N/A'], 
+    },
+    'reference': ['N/A'],
     'attachment': ['N/A']}
     """
     # Open the Word document
