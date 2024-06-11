@@ -312,34 +312,9 @@ def example_document_generation(
     # Fill in the Procedure section
     context.update(
         {
-            # Splitting up the Procedure section into multiple levels due to its complexity
-            # Returns: Lorem ipsum dolor sit amet:
-            "example_policy_1": get_mixed_types_str_keys(
-                yaml_content["procedure"]["example_policy"]
-            )[0],
-            # Returns: ['consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.']
-            "sub_example_policy_1": get_mixed_types_dict_values(
-                yaml_content["procedure"]["example_policy"]
-            )[0],
-            # Returns: "This is a very very very very long multi-line comment line 1. \
-            # \ This is a very very very very long multi-line comment line 2:"
-            "example_policy_2": (
-                get_mixed_types_str_keys(yaml_content["procedure"]["example_policy"])[1]
-            ).rstrip("\n"),
-            # Returns: This is a sub-item of the multi-line comment.
-            "sub_example_policy_2": get_mixed_types_dict_values(yaml_content["procedure"]["example_policy"])[1],
-            # Returns: Lorem ipsum dolor sit.
-            "example_policy_3": str(
-                get_mixed_types_str_keys(yaml_content["procedure"]["example_policy"])[2]
-            ).strip("['']"),
-            # Returns: I have 9 sub items:
-            "another_policy_1": get_mixed_types_str_keys(
-                yaml_content["procedure"]["another_policy"]
-            ),
-            # Returns: ['Item 1.', 'Item 2.', 'Item 3.', 'Item 4.', 'Item 5.', 'Item 6.', 'Item 7.', 'Item 8.', 'Item 9.']
-            "sub_another_policy_1": get_mixed_types_dict_values(
-                yaml_content["procedure"]["another_policy"]
-            ),
+            # The hard part is in the jinja tags within the word document
+            # See the example_template for the structure of the tags and filled_example for the filled tags
+            "procedure": yaml_content["procedure"],
         }
     )
 
