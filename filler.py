@@ -215,39 +215,6 @@ def get_mixed_types_dict_values(content: List[Any]) -> List[str]:
     return dict_values
 
 
-# def get_multi_level_content(
-#     content: List[Any],
-# ) -> List[Union[List[str], List[List[Dict[str, Union[str, Dict[str, str]]]]]]]:
-#     """
-#     Helper function that returns a list of lists, the first contains top-level strings and dictionary keys.
-#     The second contains a list of lists of dictionary values.
-#     Used to form a data structure allowing access to multi-level content in a predictable way.
-#     Usage: get_multi_level_content(content['list']['sub-list'])
-
-#     E.g. To get content from the top-level > sub-list > sub-sub-list2,
-#     use the following structure of indices:
-#     - top-level: content['list']
-#         - sub-list-item-1: content['list']['sub-list'][0]
-#             - sub-sub-list1: content['list']['sub-list'][0][0]
-#                 - sub-sub-sub-list1: content['list']['sub-list'][0][0][0]
-#         - sub-list-item-2: content['list']['sub-list'][1]
-
-#     Inputs:
-#     content (list): The list containing mixed strings and dictionaries
-
-#     Returns:
-#     list_of_lists (list): A list of lists containing the top-level strings and dictionary keys and the dictionary values
-#     """
-#     list_of_lists = []
-#     # Get all the strings and dictionary keys and append them to the list
-#     top_level_str = get_mixed_types_str_keys(content)
-#     list_of_lists.append(top_level_str)
-#     # Get all the dictionary values and append them to the list
-#     dict_values = get_mixed_types_dict_values(content)
-#     list_of_lists.append(dict_values)
-
-#     return list_of_lists
-
 
 def example_document_generation(
     yaml_content: DocumentType,
