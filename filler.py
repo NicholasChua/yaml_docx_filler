@@ -29,47 +29,53 @@ This is the assumed structure of the document template:
 import os
 from docxtpl import DocxTemplate
 import yaml
-from typing import Dict, List, Union, Optional, Any
+from typing import TypedDict, List, Dict, Optional, Any
 
 
-# Define type aliases for known sections
-RevisionHistory = [List[Dict[str, str]]]
-PreparedBy = [List[Dict[str, str]]]
-ReviewedApprovedBy = [List[Dict[str, str]]]
-Purpose = [List[str]]
-Scope = [List[str]]
-Responsibility = [List[str]]
-Definition = [List[str]]
-
-# Define a generic type alias for Procedure subsections
-GenericProcedureSubSection = Optional[
-    Union[List[str], List[Dict[str, Any]], Dict[str, Any]]
-]
-
-# Define the type alias for Procedure section
-Procedure = [Dict[str, GenericProcedureSubSection]]
-
-# Define the overall document type
-DocumentType = Dict[
-    str,
-    Union[
-        str,
-        RevisionHistory,
-        PreparedBy,
-        ReviewedApprovedBy,
-        Purpose,
-        Scope,
-        Responsibility,
-        Definition,
-        Procedure,
-        List[str],
-    ],
-]
+# Define the types for the YAML content based on the assumed structure of the document template
+class RevisionHistoryItem(TypedDict):
+    revision: str
+    date: str
+    description: str
 
 
-def transform_data(
-    data: Union[Dict[str, Any], List[Any]]
-) -> Union[Dict[str, Any], List[Any]]:
+class PreparedByItem(TypedDict):
+    name: str
+    role: str
+    date: str
+
+
+class ReviewedApprovedByItem(TypedDict):
+    name: str
+    role: str
+    date: str
+
+
+class ProcedureSection(TypedDict, total=False):
+    title: str
+    content: Optional[List[str] | List[Dict[str, Any]] | Dict[str, Any]]
+
+
+class DocumentType(TypedDict):
+    type: str
+    document_no: str
+    effective_date: str
+    document_rev: str
+    title: str
+    document_code: str
+    revision_history: List[RevisionHistoryItem]
+    prepared_by: List[PreparedByItem]
+    reviewed_approved_by: List[ReviewedApprovedByItem]
+    purpose: List[str]
+    scope: List[str]
+    responsibility: List[str]
+    definition: List[str]
+    reference: List[str]
+    attachment: List[str]
+    procedure: List[ProcedureSection]
+
+
+def transform_data(data: Dict[str, Any] | List[Any]) -> Dict[str, Any] | List[Any]:
     """
     Helper function that recursively enters an unknown-amount nested dictionary or list and applies transformations to all string elements.
     This function can be flexibly edited to apply other transformations to the data structure as needed.
@@ -175,9 +181,7 @@ def fill_common_items(yaml_content: DocumentType) -> dict:
     return context
 
 
-def get_mixed_types_str_keys(
-    content: Union[List[Any], Dict[Any, Any]]
-) -> Union[List[str], str]:
+def get_mixed_types_str_keys(content: List[Any] | Dict[Any, Any]) -> List[str] | str:
     """
     Helper function to extract a list of strings and dictionary keys from a list or dictionary of mixed strings and/or dictionaries.
     Usage: get_mixed_types_str_keys(content['list']['sub-list']) or get_mixed_types_str_keys(content['dictionary'])
