@@ -1,10 +1,10 @@
 ---
 type: EXAMPLE DOCUMENT
 document_no: EX01-100
-document_code: EX01-100-01
 effective_date: 06-JUN-2024
 document_rev: "00"
 title: Example Document
+document_code: EX01-100-01
 
 revision_history:
   - revision_no: "00"
