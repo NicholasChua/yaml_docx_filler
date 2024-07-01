@@ -1,7 +1,6 @@
 """
 This Python code is used to fill a Word document template with the extracted information from a YAML file.
 It relies on the documentHandler.py module to handle the structure and basic extraction of the YAML content.
-
 """
 
 import os
@@ -14,8 +13,7 @@ from documentHandler import (
 
 
 def fill_common_items(yaml_content: DocumentType) -> Dict:
-    """
-    Base function to read YAML data and return common items in a document template as a context dictionary.
+    """Base function to read YAML data and return common items in a document template as a context dictionary.
     Extended functions will add on to the context dictionary and fill the document template.
     This is the assumed structure of the document template:
     - Document Header and Footer Items
@@ -75,8 +73,7 @@ def fill_common_items(yaml_content: DocumentType) -> Dict:
 
 
 def get_mixed_types_str_keys(content: List[Any] | Dict[Any, Any]) -> List[str] | str:
-    """
-    Helper function to extract a list of strings and dictionary keys from a list or dictionary of mixed strings and/or dictionaries.
+    """Helper function to extract a list of strings and dictionary keys from a list or dictionary of mixed strings and/or dictionaries.
     Usage: get_mixed_types_str_keys(content['list']['sub-list']) or get_mixed_types_str_keys(content['dictionary'])
 
     Inputs:
@@ -109,8 +106,7 @@ def get_mixed_types_str_keys(content: List[Any] | Dict[Any, Any]) -> List[str] |
 
 
 def get_mixed_types_dict_values(content: List[Any]) -> List[str]:
-    """
-    Helper function that, given a list of mixed strings and dictionaries, extracts all dictionary values in the list in order.
+    """Helper function that, given a list of mixed strings and dictionaries, extracts all dictionary values in the list in order.
     Returns a list of lists containing the values of the dictionaries in the input list.
     The inner lists contain the values of the dictionaries in the order they appear in the input list.
     Usage: get_mixed_types_dict_values(content['list']['sub-list'])
@@ -149,8 +145,7 @@ def example_document_generation(
     input_file: str = os.path.join("example", "template_example.docx"),
     output_file: str = os.path.join("example", "filled_example.docx"),
 ) -> None:
-    """
-    Used to fill a Word document template with the extracted information.
+    """Used to fill a Word document template with the extracted information.
     This is purely an example and should be customized based on the actual document template.
     Usage: process_document(content, input_file, output_file)
 
